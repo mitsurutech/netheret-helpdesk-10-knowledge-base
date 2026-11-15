@@ -8,7 +8,8 @@ from sqlalchemy import case
 from .auth import login_required, role_required
 from .extensions import db
 from .models import (
-    CATEGORIES, PRIORITIES, STAFF_ROLES, STATUSES, TIERS, Company, Ticket, TicketUpdate, User,
+    CATEGORIES, PRIORITIES, STAFF_ROLES, STATUSES, TIERS, Article, Company, Ticket, TicketUpdate,
+    User,
 )
 
 # Only these roles may give a request to somebody else. Everybody else on
@@ -142,8 +143,14 @@ def detail(ticket_id):
     staff = db.session.scalars(
         db.select(User).where(User.role.in_(STAFF_ROLES)).order_by(User.name)
     ).all()
+    # Knowledge base articles in the same category, most helpful first, so
+    # Tier 1 can try a known fix before escalating.
+    articles = db.session.scalars(
+        db.select(Article).where(Article.category == ticket.category)
+        .order_by(Article.helpful_count.desc()).limit(3)
+    ).all()
     return render_template(
-        "tickets/detail.html", ticket=ticket, staff=staff, statuses=STATUSES,
+        "tickets/detail.html", ticket=ticket, staff=staff, statuses=STATUSES, articles=articles,
         higher_tiers=[tier for tier in TIERS if tier > ticket.tier],
         can_assign=g.user.role in ASSIGNING_ROLES,
     )

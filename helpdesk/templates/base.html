@@ -32,6 +32,7 @@
           {% if g.user.role in ["customer", "tier1", "manager"] %}
           {{ nav_link('tickets.new_request', 'Raise a request') }}
           {% endif %}
+          {{ nav_link('kb.search', 'Knowledge base') }}
           {% else %}
           {{ nav_link('main.home', 'Home') }}
           {{ nav_link('auth.signin', 'Sign in') }}

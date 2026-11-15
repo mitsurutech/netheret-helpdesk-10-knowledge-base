@@ -13,6 +13,7 @@
     <li><a href="{{ url_for('tickets.queue', status='new') }}">New requests to triage</a></li>
     <li><a href="{{ url_for('tickets.queue', assigned='me') }}">Requests assigned to me</a></li>
     <li><a href="{{ url_for('tickets.new_request') }}">Log a request for a customer</a></li>
+    <li><a href="{{ url_for('kb.search') }}">Search the knowledge base</a></li>
   </ul>
   {% elif g.user.role in ["tier2", "tier3"] %}
   <p>Work on escalated requests.</p>

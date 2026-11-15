@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+  <p><a href="{{ url_for('kb.search') }}">Back to the knowledge base</a></p>
+  <h1>{{ article.title }}</h1>
+  <p class="muted">
+    {{ article.category|capitalize }}. Written by {{ article.author.name }}, last updated {{ article.updated_at|datetime }}.
+    Read {{ article.views }} times.
+  </p>
+
+  <h2>Symptoms</h2>
+  <p class="keep-lines">{{ article.symptoms }}</p>
+
+  <h2>Solution</h2>
+  <p class="keep-lines">{{ article.solution }}</p>
+
+  <section class="card" aria-labelledby="helpful-heading">
+    <h2 id="helpful-heading">Did this help?</h2>
+    {% if already_voted %}
+    <p>You said this article helped. Thank you.</p>
+    {% else %}
+    <form method="post" action="{{ url_for('kb.helpful', article_id=article.id) }}">
+      <button type="submit">Yes, this helped</button>
+    </form>
+    {% endif %}
+    <p class="muted">{{ article.helpful_count }} people found this helpful.</p>
+  </section>
+
+  {% if g.user.is_staff %}
+  <p><a href="{{ url_for('kb.edit', article_id=article.id) }}">Edit this article</a></p>
+  {% endif %}
+{% endblock %}

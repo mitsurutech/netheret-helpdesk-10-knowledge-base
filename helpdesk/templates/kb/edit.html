@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "_macros.html" import error_summary, field_error %}
+{% block title %}{{ "Edit article" if article else "Write an article" }}{% endblock %}
+{% block content %}
+  <h1>{{ "Edit article" if article else "Write an article" }}</h1>
+  {{ error_summary(errors) }}
+
+  <form method="post" novalidate>
+    <div class="field">
+      <label for="title">Title</label>
+      {{ field_error(errors, "title") }}
+      <input type="text" id="title" name="title" maxlength="150" value="{{ form.title }}"{% if errors.title %} aria-describedby="title-error"{% endif %}>
+    </div>
+    <div class="field">
+      <label for="category">Category</label>
+      {{ field_error(errors, "category") }}
+      <select id="category" name="category"{% if errors.category %} aria-describedby="category-error"{% endif %}>
+        <option value="">Choose a category</option>
+        {% for name in categories %}
+        <option value="{{ name }}"{% if form.category == name %} selected{% endif %}>{{ name|capitalize }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="symptoms">Symptoms</label>
+      <span class="hint" id="symptoms-hint">What the user sees or says, in their words.</span>
+      {{ field_error(errors, "symptoms") }}
+      <textarea id="symptoms" name="symptoms" aria-describedby="symptoms-hint{% if errors.symptoms %} symptoms-error{% endif %}">{{ form.symptoms }}</textarea>
+    </div>
+    <div class="field">
+      <label for="solution">Solution</label>
+      <span class="hint" id="solution-hint">Numbered steps work best, one per line.</span>
+      {{ field_error(errors, "solution") }}
+      <textarea id="solution" name="solution" aria-describedby="solution-hint{% if errors.solution %} solution-error{% endif %}">{{ form.solution }}</textarea>
+    </div>
+    <button type="submit">Save article</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Knowledge base{% endblock %}
+{% block content %}
+  <h1>Knowledge base</h1>
+  <p>Answers to problems we have seen before.</p>
+
+  <form class="filters" method="get" action="{{ url_for('kb.search') }}" role="search">
+    <div class="field">
+      <label for="q">Search</label>
+      <input type="search" id="q" name="q" value="{{ q }}">
+    </div>
+    <div class="field">
+      <label for="category">Category</label>
+      <select id="category" name="category">
+        <option value="">Any category</option>
+        {% for name in categories %}
+        <option value="{{ name }}"{% if category == name %} selected{% endif %}>{{ name|capitalize }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filter-buttons">
+      <button type="submit">Search</button>
+    </div>
+  </form>
+
+  {% if g.user.is_staff %}
+  <p><a class="button" href="{{ url_for('kb.edit') }}">Write an article</a></p>
+  {% endif %}
+
+  <h2>{{ articles|length }} article{{ "" if articles|length == 1 else "s" }}{% if q %} matching "{{ q }}"{% endif %}</h2>
+  <ul class="article-list">
+    {% for article in articles %}
+    <li>
+      <h3><a href="{{ url_for('kb.read', article_id=article.id) }}">{{ article.title }}</a></h3>
+      <p>{{ article.symptoms|truncate(140) }}</p>
+      <p class="muted">{{ article.category|capitalize }}. {{ article.helpful_count }} people found this helpful.</p>
+    </li>
+    {% else %}
+    <li>No articles match. Try fewer or different words.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -201,3 +201,9 @@ h3 { font-size: 1.1rem; margin: 1rem 0 0.5rem; }
 .job-in_progress { color: var(--warn); }
 .job-done { color: var(--good); }
 .job-cancelled { color: var(--muted); }
+
+/* Knowledge base results */
+.article-list { list-style: none; padding: 0; }
+.article-list li { border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+.article-list h3 { margin-bottom: 0.25rem; }
+.article-list p { margin: 0.25rem 0; }
